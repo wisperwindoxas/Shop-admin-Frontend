@@ -1488,13 +1488,22 @@ export default function LandingPage() {
 
             <div className="mt-8 space-y-2.5">
               <a
-                href="https://drive.google.com/file/d/1YDOIg9dPZv4O_0761uyvPXRSeiOBgv49/view?usp=drive_link"
-                target="_blank"
-                rel="noopener noreferrer"
+                href="/downloads/Shop-Admin.uz Setup 0.1.0.exe"
+                download="Shop-Admin.uz Setup 0.1.0.exe"
                 className="w-full py-3.5 rounded-xl font-black text-xs bg-gradient-to-r from-emerald-400 to-teal-400 text-slate-950 hover:opacity-95 flex items-center justify-center gap-2 shadow-md cursor-pointer transition-all transform hover:-translate-y-0.5"
               >
                 <FiDownload />
-                Windows Setup Yuklab Olish (Google Drive)
+                Windows Setup Yuklab Olish (.exe)
+              </a>
+              <a
+                href="https://drive.google.com/file/d/1YDOIg9dPZv4O_0761uyvPXRSeiOBgv49/view?usp=drive_link"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`w-full py-2.5 rounded-xl font-bold text-[11px] border flex items-center justify-center gap-2 transition-all ${
+                  theme === "dark" ? "border-slate-800 text-slate-400 hover:text-white hover:bg-slate-800/50" : "border-slate-200 text-slate-600 hover:text-slate-900 hover:bg-slate-100"
+                }`}
+              >
+                Google Drive orqali yuklash
               </a>
               <span className="text-[11px] text-center block text-slate-400 font-medium">
                 Windows 10 / 11 (64-bit) uchun to‘liq kassa dasturi
