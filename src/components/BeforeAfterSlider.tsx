@@ -66,7 +66,7 @@ export default function BeforeAfterSlider({ theme }: BeforeAfterSliderProps) {
 
           <div className="flex justify-end pt-4">
             <span className="text-[11px] text-emerald-300/80 font-bold">
-              ✓ Kamomad 0% ga tushadi, savdo hajmi 35% ga oshadi
+              ✓ Inson omilidagi xatolar va kamomad xavfi 90% gacha kamayadi, xizmat tezligi oshadi
             </span>
           </div>
         </div>

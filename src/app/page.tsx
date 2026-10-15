@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import confetti from "canvas-confetti";
+import { PRICING_PLANS } from "@/config/plans";
 import {
   FiDownload,
   FiMonitor,
@@ -153,27 +154,8 @@ export default function LandingPage() {
   const [typedStandardLine, setTypedStandardLine] = useState(0);
   const [typedStandardChar, setTypedStandardChar] = useState(0);
 
-  const basicPlanList = [
-    "1 ta savdo nuqtasi (POS Kassa)",
-    "Cheksiz tovarlar va menyu qo'shish",
-    "3 tagacha xodim foydalanuvchisi",
-    "100% Oflayn rejim va chek chop etish",
-    "Shtrix-kod skaner (USB HID) qo'llab-quvvatlash",
-    "Kunlik va oylik kassa hisobotlari (P&L)",
-    "Xavfsizlik PIN kodi (Tovarni o'chirish himoyasi)",
-  ];
-
-  const standardPlanList = [
-    "Barcha 3 xil rejim: Do'kon, Kafe va Shirinliklar",
-    "3 tagacha kassa va bir nechta omborlar hisobi",
-    "Cheksiz xodimlar (Kassir, Ofitsiant, Oshpaz, Admin)",
-    "Shtrih-Print tarozi (UDP jonli vazn va PLU yuklash)",
-    "Stollar xaritasi & Oshxona KDS planshet ekrani",
-    "Tort buyurtmalari, tabrik yozuvlari va avans hisobi",
-    "Nasiya (Qarz) daftari + Avtomatik SMS eslatmalar",
-    "Telegram Bot: Kunlik tushum va qoldiqlar telefonda",
-    "24/7 VIP Ko'mak va mutaxassis o'rnatib berishi",
-  ];
+  const basicPlanList = PRICING_PLANS.basic.features;
+  const standardPlanList = PRICING_PLANS.standard.features;
 
   // Sequential typing loop when pricing is viewed
   useEffect(() => {
@@ -1177,12 +1159,12 @@ export default function LandingPage() {
           </p>
         </div>
 
-        {/* Live Typewriter Status Indicator */}
+        {/* Status Indicator */}
         <div className="flex items-center justify-center gap-2 mb-8">
           <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
           <span className="text-xs font-bold text-slate-400">
             {typedBasicLine < basicPlanList.length || typedStandardLine < standardPlanList.length
-              ? "Tarif imkoniyatlari yozilmoqda... (Darhol ko‘rish uchun ustiga bosing)"
+              ? "Tarif imkoniyatlari va qulayliklari ro‘yxati (Tezkor ko‘rish)"
               : "Barcha imkoniyatlar muvaffaqiyatli yuklandi ✓"}
           </span>
         </div>
@@ -1602,46 +1584,126 @@ export default function LandingPage() {
       </section>
 
       {/* FOOTER */}
-      <footer className={`border-t py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto text-xs ${
-        theme === "dark" ? "border-white/5 text-slate-400" : "border-slate-200 text-slate-600"
+      <footer className={`border-t py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto text-xs ${
+        theme === "dark" ? "border-white/10 text-slate-400" : "border-slate-200 text-slate-600"
       }`}>
-        <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="flex items-center gap-3">
-            <Image
-              src="/logo.png"
-              alt="Shop-Admin.uz"
-              width={36}
-              height={36}
-              className="w-9 h-9 object-contain drop-shadow-sm"
-            />
-            <span className={`font-black text-base ${theme === "dark" ? "text-white" : "text-slate-900"}`}>
-              Shop-Admin.uz
-            </span>
-            <span className="text-slate-500">© 2026. Barcha huquqlar himoyalangan.</span>
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
+          {/* Col 1: Brand Info */}
+          <div className="space-y-4 md:col-span-1">
+            <div className="flex items-center gap-3">
+              <Image
+                src="/logo.png"
+                alt="Shop-Admin.uz Logo"
+                width={36}
+                height={36}
+                className="w-9 h-9 object-contain drop-shadow-sm"
+              />
+              <span className={`font-black text-lg ${theme === "dark" ? "text-white" : "text-slate-900"}`}>
+                Shop-Admin<span className="text-emerald-500">.uz</span>
+              </span>
+            </div>
+            <p className="text-xs leading-relaxed text-slate-400">
+              O‘zbekistondagi do‘kon, kafe va qandolat korxonalari uchun 100% oflayn ishlaydigan
+              zamonaviy POS kassa va ombor hisobi dasturi.
+            </p>
+            <div className="pt-2">
+              <a
+                href="https://t.me/shop_admin_support_bot"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 text-cyan-400 hover:text-cyan-300 font-bold"
+              >
+                <FaTelegramPlane /> @shop_admin_support_bot
+              </a>
+            </div>
           </div>
 
-          <div className="flex items-center gap-6 font-semibold flex-wrap justify-center">
-            <Link href="/guide" className="hover:text-emerald-500 transition-colors">
-              Foydalanish Qo&apos;llanmasi
-            </Link>
-            <a href="#directions" className="hover:text-emerald-500 transition-colors">
-              3 Yo&apos;nalish
-            </a>
-            <a href="#pricing" className="hover:text-emerald-500 transition-colors">
-              Tariflar (100k / 150k)
-            </a>
-            <a href="#download" className="hover:text-emerald-500 transition-colors">
-              Yuklab Olish
-            </a>
-            <a
-              href="https://t.me/shop_admin_support_bot"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-cyan-500 hover:underline flex items-center gap-1 font-bold"
-            >
-              <FaTelegramPlane /> Telegram Qo&apos;llab-quvvatlash (@shop_admin_support_bot)
-            </a>
+          {/* Col 2: Yo'nalishlar */}
+          <div>
+            <h4 className={`font-black text-sm uppercase tracking-wider mb-4 ${theme === "dark" ? "text-white" : "text-slate-900"}`}>
+              Biznes Yo‘nalishlari
+            </h4>
+            <ul className="space-y-2.5">
+              <li>
+                <Link href="/do-kon-uchun-pos" className="hover:text-emerald-400 transition">
+                  Do‘kon & Supermarket POS
+                </Link>
+              </li>
+              <li>
+                <Link href="/kafe-restoran-uchun-pos" className="hover:text-amber-400 transition">
+                  Kafe & Restoran POS
+                </Link>
+              </li>
+              <li>
+                <Link href="/shirinliklar-uchun-hisob" className="hover:text-pink-400 transition">
+                  Shirinliklar & Qandolat POS
+                </Link>
+              </li>
+              <li>
+                <Link href="/offline-pos" className="hover:text-cyan-400 transition">
+                  Offline Kassa Imkoniyati
+                </Link>
+              </li>
+            </ul>
           </div>
+
+          {/* Col 3: Mahsulot va Tariflar */}
+          <div>
+            <h4 className={`font-black text-sm uppercase tracking-wider mb-4 ${theme === "dark" ? "text-white" : "text-slate-900"}`}>
+              Mahsulot & Narxlar
+            </h4>
+            <ul className="space-y-2.5">
+              <li>
+                <Link href="/narxlar" className="hover:text-emerald-400 transition">
+                  Shaffof Tariflar (100k / 150k)
+                </Link>
+              </li>
+              <li>
+                <a href="#pos-demo" onClick={(e) => { e.preventDefault(); scrollToSection("pos-demo"); }} className="hover:text-emerald-400 transition">
+                  Interaktiv POS Demo
+                </a>
+              </li>
+              <li>
+                <a href="#download" onClick={(e) => { e.preventDefault(); scrollToSection("download"); }} className="hover:text-emerald-400 transition">
+                  Ilovani Yuklab Olish (Win / Mac)
+                </a>
+              </li>
+              <li>
+                <Link href="/guide" className="hover:text-emerald-400 transition">
+                  Foydalanish Qo‘llanmasi
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Col 4: Bog'lanish va Huquqiy */}
+          <div>
+            <h4 className={`font-black text-sm uppercase tracking-wider mb-4 ${theme === "dark" ? "text-white" : "text-slate-900"}`}>
+              Yordam & Huquqiy
+            </h4>
+            <ul className="space-y-2.5">
+              <li>
+                <Link href="/aloqa" className="hover:text-emerald-400 transition">
+                  Qo‘llab-quvvatlash va Aloqa
+                </Link>
+              </li>
+              <li>
+                <Link href="/maxfiylik-siyosati" className="hover:text-emerald-400 transition">
+                  Maxfiylik Siyosati
+                </Link>
+              </li>
+              <li>
+                <Link href="/foydalanish-shartlari" className="hover:text-emerald-400 transition">
+                  Foydalanish Shartlari (Oferta)
+                </Link>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div className="pt-8 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between gap-4 text-slate-500">
+          <p>© {new Date().getFullYear()} Shop-Admin.uz. Barcha huquqlar himoyalangan.</p>
+          <p className="text-[11px]">O‘zbekiston bozoriga moslashtirilgan milliy ERP tizimi.</p>
         </div>
       </footer>
 

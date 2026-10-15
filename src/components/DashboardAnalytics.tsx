@@ -180,7 +180,7 @@ export default function DashboardAnalytics({ theme }: DashboardAnalyticsProps) {
       <div className="text-center max-w-2xl mx-auto mb-12">
         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-xs font-black uppercase tracking-wider mb-3">
           <BarChart3 className="w-3.5 h-3.5" />
-          Katta POS Dashboard & Tahlil
+          POS Dashboard Tahlil Paneli (Namunaviy Demo Ma’lumotlar)
         </div>
         <h2 className="text-3xl sm:text-5xl font-black tracking-tight">
           Barcha Muhim Ko‘rsatkichlar Bitta Displeyda
