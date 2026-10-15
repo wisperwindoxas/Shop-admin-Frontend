@@ -1,7 +1,8 @@
-import React from "react";
-import type { Metadata } from "next";
+"use client";
+
+import React, { useState } from "react";
 import Link from "next/link";
-import { PRICING_PLANS } from "@/config/plans";
+import { DIRECTION_PLANS, BusinessDirection } from "@/config/plans";
 import {
   FiCheck,
   FiX,
@@ -9,62 +10,89 @@ import {
   FiShield,
   FiHelpCircle,
   FiArrowRight,
-  FiPhoneCall,
-  FiCheckCircle,
+  FiShoppingBag,
+  FiCoffee,
+  FiInfo,
 } from "react-icons/fi";
-
-export const metadata: Metadata = {
-  title: "Shaffof Tariflar va Narxlar | ShopAdmin POS Dasturi",
-  description:
-    "ShopAdmin POS tizimining qulay va shaffof narxlari. Yashirin to‘lovlarsiz, 14 kunlik bepul sinov muddati bilan. Basic 100 000 so‘m, Standart 150 000 so‘m oyiga.",
-  alternates: {
-    canonical: "https://shop-admin.uz/narxlar",
-  },
-  openGraph: {
-    title: "Shaffof Tariflar va Narxlar | ShopAdmin POS Dasturi",
-    description:
-      "Biznesingiz uchun eng maqbul tarifni tanlang. 14 kun bepul sinov, bepul o‘rnatish va texnik qo‘llab-quvvatlash.",
-    url: "https://shop-admin.uz/narxlar",
-  },
-};
+import { GiCakeSlice } from "react-icons/gi";
 
 export default function PricingPage() {
-  const comparisonRows = [
-    { name: "Kassalar soni (baza tarifda)", basic: "1 ta kassa", standard: "3 tagacha kassa" },
-    {
-      name: "Biznes rejimlari (Do‘kon, Kafe, Shirinlik)",
-      basic: "Faqat 1 ta tanlangan rejim",
-      standard: "Barcha 3 ta rejim qo‘llab-quvvatlanadi",
-    },
-    { name: "100% Oflayn ishlash imkoniyati", basic: true, standard: true },
-    { name: "Shtrix-kod skaner va chek printer integratsiyasi", basic: true, standard: true },
-    { name: "Ombor qoldiqlari va kamomad hisobi", basic: true, standard: true },
-    { name: "Qarz (nasiya) daftari va mijozlar hisobi", basic: true, standard: true },
-    { name: "Stollar xaritasi va oshxona printeri (KDS)", basic: false, standard: true },
-    { name: "Vaznli mahsulotlar va tarozi integratsiyasi", basic: false, standard: true },
-    { name: "Avans (zaklad) va maxsus buyurtmalar taqvimi", basic: false, standard: true },
-    { name: "Mobil analitika va Telegram hisobotlar", basic: false, standard: true },
-    { name: "Qo‘shimcha kassa ulash imkoniyati", basic: "+50 000 so‘m/oy", standard: "+50 000 so‘m/oy" },
-    { name: "Bepul 14 kunlik sinov muddati", basic: true, standard: true },
-    { name: "Bepul o‘rnatish va xodimlarni o‘rgatish", basic: true, standard: true },
-  ];
+  const [direction, setDirection] = useState<BusinessDirection>("retail");
+
+  const currentSet = DIRECTION_PLANS[direction];
+
+  // Yo'nalishga qarab user-panel imkoniyatlari taqqoslash jadvali
+  const comparisonData: Record<
+    BusinessDirection,
+    Array<{ name: string; basic: string | boolean; standard: string | boolean }>
+  > = {
+    retail: [
+      { name: "Savdo nuqtalari (Kassalar soni)", basic: "1 ta kassa", standard: "3 tagacha kassa" },
+      { name: "Cheksiz tovarlar va shtrix-kodlar", basic: true, standard: true },
+      { name: "100% Oflayn rejim va chek chop etish", basic: true, standard: true },
+      { name: "Shtrix-kod skaner (USB / Bluetooth)", basic: true, standard: true },
+      { name: "Kassa smenasi (Ochish/Yopish, Z-hisobot)", basic: true, standard: true },
+      { name: "Omborxona qoldiqlari va tannarx hisobi", basic: true, standard: true },
+      { name: "Nasiya (Qarz) daftari + avtomatik SMS eslatma", basic: false, standard: true },
+      { name: "Shtrih-Print tarozilar (UDP jonli vazn va PLU)", basic: false, standard: true },
+      { name: "Kamomad va inventarizatsiya taqqoslash jurnali", basic: false, standard: true },
+      { name: "Partiyalar va yaroqlilik muddati nazorati", basic: false, standard: true },
+      { name: "Inkassatsiya (Collector) moduli", basic: false, standard: true },
+      { name: "Telegram Bot: Kunlik savdo tushumi va qoldiqlar", basic: false, standard: true },
+      { name: "Qo‘shimcha kassa ulash", basic: "+50 000 so‘m/oy", standard: "+50 000 so‘m/oy" },
+      { name: "Bepul 14 kunlik to‘liq sinov", basic: true, standard: true },
+    ],
+    cafe: [
+      { name: "Terminallar va planshetlar soni", basic: "1 ta terminal", standard: "3 tagacha kassa / planshet" },
+      { name: "Tezkor kassa savdosi va chek chiqarish", basic: true, standard: true },
+      { name: "100% Oflayn rejimda buyurtma olish", basic: true, standard: true },
+      { name: "Taomlar menyusi va fotosuratlari", basic: true, standard: true },
+      { name: "Kassir va xodimlar PIN kodi himoyasi", basic: true, standard: true },
+      { name: "Interaktiv stollar xaritasi (Zallar, VIP, Terassa)", basic: false, standard: true },
+      { name: "Oshxona KDS planshet ekrani va chek printeri", basic: false, standard: true },
+      { name: "Taom modifikatorlari (muzli, shakarsiz, qo‘shimcha)", basic: false, standard: true },
+      { name: "Xizmat haqi (% servis) avtomatik hisobi", basic: false, standard: true },
+      { name: "Hisobni bo‘lish (Split) va stollarni ko‘chirish", basic: false, standard: true },
+      { name: "Taom retseptlari (Texkarta va masalliqlar sarfi)", basic: false, standard: true },
+      { name: "Telegram Bot: Kunlik kassa va tushum", basic: false, standard: true },
+      { name: "Qo‘shimcha ofitsiant plansheti", basic: "+50 000 so‘m/oy", standard: "+50 000 so‘m/oy" },
+      { name: "Bepul 14 kunlik to‘liq sinov", basic: true, standard: true },
+    ],
+    sweets: [
+      { name: "Savdo nuqtalari (Kassalar soni)", basic: "1 ta kassa", standard: "3 tagacha kassa" },
+      { name: "Pishiriq va shirinliklar katalogi", basic: true, standard: true },
+      { name: "100% Oflayn rejim va chek chop etish", basic: true, standard: true },
+      { name: "Kassa smenasi va kunlik tushum hisoboti", basic: true, standard: true },
+      { name: "Stollarsiz, vizual Shirinliklar POS oynasi", basic: false, standard: true },
+      { name: "Elektron tarozi bilan grammli savdo", basic: false, standard: true },
+      { name: "Maxsus tort buyurtmalari va topshirish kalendari", basic: false, standard: true },
+      { name: "Tabrik yozuvlari va bezak talablari hisobi", basic: false, standard: true },
+      { name: "Avans (zaklad) qabul qilish va yakuniy chek", basic: false, standard: true },
+      { name: "Qandolat sexiga zakaz uzatish statuslari", basic: false, standard: true },
+      { name: "Kremli mahsulotlar yaroqlilik muddati", basic: false, standard: true },
+      { name: "Lenta va korobka qadoqlash xarajatlari", basic: false, standard: true },
+      { name: "Telegram Bot: Buyurtmalar holati telefonda", basic: false, standard: true },
+      { name: "Qo‘shimcha savdo nuqtasi", basic: "+50 000 so‘m/oy", standard: "+50 000 so‘m/oy" },
+      { name: "Bepul 14 kunlik to‘liq sinov", basic: true, standard: true },
+    ],
+  };
 
   const faqs = [
     {
-      q: "Tarif to‘lovlari qachon va qanday to‘lanadi?",
-      a: "Birinchi 14 kun davomida tizimdan bepul foydalanasiz. Sinov muddati tugagach, xizmatni oylik yoki yillik Payme, Click yoki bank o‘tkazmasi orqali to‘lashingiz mumkin.",
+      q: "150 000 so‘mlik tarif barcha 3 ta yo‘nalishni o‘z ichiga oladimi?",
+      a: "Yo‘q. ShopAdmin tizimida biznes yo‘nalishlari (Do‘kon, Kafe, Shirinliklar) bir-biridan qat’iy ajratilgan mustaqil arxitekturaga ega. 150 000 so‘mlik Standart tarif faqat siz tanlagan 1 ta yo‘nalish uchun to‘liq imkoniyatlarni (3 tagacha kassa, KDS/tarozi/ombor) taqdim etadi. Agar bir vaqtning o‘zida ham do‘kon, ham kafe yuritsangiz, har bir yo‘nalish uchun alohida mos tarif to‘lanadi.",
     },
     {
-      q: "Keyinchalik qo‘shimcha kassa qo‘shsa bo‘ladimi?",
-      a: "Albatta. Standart tarifda dastlab 3 tagacha kassa kiritilgan. Zarurat bo‘lsa har bir qo‘shimcha kassa uchun oyiga atigi 50 000 so‘m qo‘shiladi.",
+      q: "Birinchi 14 kunlik sinov qanday ishlaydi?",
+      a: "Siz tanlagan biznes yo‘nalishi bo‘yicha 14 kun davomida tizimning barcha imkoniyatlaridan to‘liq va bepul foydalanasiz. Hech qanday oldindan to‘lov talab etilmaydi.",
     },
     {
-      q: "Hech qanday yashirin komissiya yoki foiz bormi?",
-      a: "Mutlaqo yo‘q. ShopAdmin savdo aylanmangizdan foiz ushlamaydi. Siz faqat qat’iy belgilangan oylik abonent to‘lovini to‘laysiz.",
+      q: "Keyinchalik qo‘shimcha kassa yoki filial qo‘shsa bo‘ladimi?",
+      a: "Albatta. Standart tarifda tanlangan yo‘nalish uchun dastlab 3 tagacha kassa mavjud. Har bir qo‘shimcha kassa uchun oyiga atigi 50 000 so‘m qo‘shiladi.",
     },
     {
-      q: "Internet o‘chib qolsa tarif to‘xtab qoladimi?",
-      a: "Litsenziya muddati dastur ichida saqlanadi va internet bo‘lmaganda ham dasturingiz to‘xtovsiz ishlashda davom etadi.",
+      q: "Savdo aylanmasidan foiz ushlanadimi?",
+      a: "Mutlaqo yo‘q. ShopAdmin abonent to‘lovi asosida ishlaydi, aylanmangiz qancha bo‘lishidan qat’i nazar qo‘shimcha foiz olinmaydi.",
     },
   ];
 
@@ -113,26 +141,75 @@ export default function PricingPage() {
       </header>
 
       {/* HERO SECTION */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto text-center relative">
+      <section className="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto text-center relative">
         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-xs font-black uppercase tracking-wider mb-6">
           <FiZap className="w-3.5 h-3.5" />
-          Shaffof va Qat’iy Narxlar
+          Shaffof va Yo‘nalish Bo‘yicha Alohida Tariflar
         </div>
 
         <h1 className="text-4xl sm:text-6xl font-black tracking-tight max-w-4xl mx-auto leading-tight">
-          Biznesingiz Hajmiga Mos Keladigan Oddiy Tariflar
+          Biznesingiz Yo‘nalishiga Mos Moslashuvchan Tariflar
         </h1>
 
-        <p className="mt-6 text-base sm:text-lg text-slate-400 max-w-2xl mx-auto leading-relaxed font-medium">
-          Savdo aylanmasidan foiz olinmaydi. Yashirin to‘lovlarsiz, 14 kunlik to‘liq bepul sinov
-          muddati bilan boshlang.
+        <p className="mt-4 text-base sm:text-lg text-slate-400 max-w-2xl mx-auto leading-relaxed font-medium">
+          Har bir biznes yo‘nalishi o‘ziga xos imkoniyatlarga ega. Kerakli yo‘nalishni tanlang va
+          14 kun bepul sinab ko‘ring.
         </p>
+
+        {/* 3 DIRECTION TOGGLE BUTTONS */}
+        <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
+          <button
+            onClick={() => setDirection("retail")}
+            className={`flex items-center gap-2.5 px-6 py-3 rounded-2xl font-black text-xs uppercase tracking-wider transition-all cursor-pointer ${
+              direction === "retail"
+                ? "bg-emerald-500 text-slate-950 shadow-lg shadow-emerald-500/30 scale-105 border border-emerald-400"
+                : "bg-white/[0.04] text-slate-300 hover:bg-white/[0.08] border border-white/10"
+            }`}
+          >
+            <FiShoppingBag className="text-base" />
+            <span>Do‘kon & Supermarket</span>
+          </button>
+
+          <button
+            onClick={() => setDirection("cafe")}
+            className={`flex items-center gap-2.5 px-6 py-3 rounded-2xl font-black text-xs uppercase tracking-wider transition-all cursor-pointer ${
+              direction === "cafe"
+                ? "bg-amber-500 text-slate-950 shadow-lg shadow-amber-500/30 scale-105 border border-amber-400"
+                : "bg-white/[0.04] text-slate-300 hover:bg-white/[0.08] border border-white/10"
+            }`}
+          >
+            <FiCoffee className="text-base" />
+            <span>Kafe & Restoran</span>
+          </button>
+
+          <button
+            onClick={() => setDirection("sweets")}
+            className={`flex items-center gap-2.5 px-6 py-3 rounded-2xl font-black text-xs uppercase tracking-wider transition-all cursor-pointer ${
+              direction === "sweets"
+                ? "bg-pink-500 text-slate-950 shadow-lg shadow-pink-500/30 scale-105 border border-pink-400"
+                : "bg-white/[0.04] text-slate-300 hover:bg-white/[0.08] border border-white/10"
+            }`}
+          >
+            <GiCakeSlice className="text-base" />
+            <span>Shirinliklar & Qandolat</span>
+          </button>
+        </div>
+
+        {/* DIRECTION NOTICE BOX */}
+        <div className="mt-6 inline-flex items-center gap-2.5 px-5 py-2.5 rounded-xl bg-slate-900 border border-white/10 text-xs text-slate-300 max-w-xl text-left">
+          <FiInfo className="w-4 h-4 text-cyan-400 shrink-0" />
+          <span>
+            <strong>Eslatma:</strong> Tarif faqat tanlangan{" "}
+            <span className="text-white font-bold">{currentSet.title}</span> uchun amal qiladi. Har
+            bir yo‘nalish uchun alohida obuna to‘lanadi.
+          </span>
+        </div>
       </section>
 
-      {/* PRICING CARDS */}
+      {/* PRICING CARDS FOR ACTIVE DIRECTION */}
       <section className="pb-20 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {Object.values(PRICING_PLANS).map((plan) => (
+          {[currentSet.basic, currentSet.standard].map((plan) => (
             <div
               key={plan.id}
               className={`rounded-3xl p-8 sm:p-10 border transition relative flex flex-col justify-between ${
@@ -148,6 +225,9 @@ export default function PricingPage() {
               )}
 
               <div>
+                <div className="inline-block px-3 py-1 rounded-lg bg-white/5 text-[11px] font-bold text-slate-400 mb-2">
+                  {plan.directionTitle}
+                </div>
                 <h3 className="text-2xl font-black text-white">{plan.name}</h3>
                 <p className="text-slate-400 text-xs mt-2">{plan.description}</p>
 
@@ -158,9 +238,13 @@ export default function PricingPage() {
                   <span className="text-slate-400 text-sm font-semibold">{plan.period}</span>
                 </div>
 
+                <div className="mt-2 text-[11px] text-amber-400/90 font-medium">
+                  {plan.directionNotice}
+                </div>
+
                 <div className="mt-8 space-y-3.5">
                   <p className="text-xs font-black text-slate-300 uppercase tracking-wider">
-                    Tarif imkoniyatlari:
+                    Ushbu tarif imkoniyatlari:
                   </p>
                   {plan.features.map((feature, idx) => (
                     <div key={idx} className="flex items-start gap-3 text-xs sm:text-sm text-slate-300">
@@ -189,15 +273,15 @@ export default function PricingPage() {
         </div>
       </section>
 
-      {/* COMPARISON TABLE */}
+      {/* COMPARISON TABLE FOR ACTIVE DIRECTION */}
       <section className="py-20 bg-slate-900/40 border-y border-white/5">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-black tracking-tight text-white">
-              Tariflarning to‘liq taqqoslanishi
+              {currentSet.title}: User Panel Imkoniyatlari Taqqoslanishi
             </h2>
             <p className="mt-3 text-slate-400 text-sm">
-              Ehtiyojingizga qarab eng maqbul imkoniyatlarni tanlang.
+              Basic va Standart tariflarining texnik va amaliy farqlari
             </p>
           </div>
 
@@ -206,18 +290,18 @@ export default function PricingPage() {
               <thead>
                 <tr className="border-b border-white/10">
                   <th className="py-4 px-4 text-xs font-black uppercase tracking-wider text-slate-400">
-                    Funksiya / Imkoniyat
+                    User Panel Imkoniyati
                   </th>
                   <th className="py-4 px-4 text-xs font-black uppercase tracking-wider text-slate-300 text-center">
-                    Basic
+                    Basic (100k)
                   </th>
                   <th className="py-4 px-4 text-xs font-black uppercase tracking-wider text-emerald-400 text-center">
-                    Standart
+                    Standart (150k)
                   </th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-white/5 text-xs sm:text-sm">
-                {comparisonRows.map((row, idx) => (
+                {comparisonData[direction].map((row, idx) => (
                   <tr key={idx} className="hover:bg-white/[0.01]">
                     <td className="py-4 px-4 text-slate-300 font-medium">{row.name}</td>
                     <td className="py-4 px-4 text-center text-slate-400">
@@ -257,7 +341,7 @@ export default function PricingPage() {
             <FiHelpCircle className="w-4 h-4" /> Ko‘p Beriladigan Savollar
           </div>
           <h2 className="text-3xl font-black tracking-tight text-white">
-            Tariflar bo‘yicha savol-javoblar
+            Tariflar va to‘lov bo‘yicha savol-javoblar
           </h2>
         </div>
 

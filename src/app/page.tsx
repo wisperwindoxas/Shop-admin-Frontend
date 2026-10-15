@@ -4,7 +4,8 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import confetti from "canvas-confetti";
-import { PRICING_PLANS } from "@/config/plans";
+import { PRICING_PLANS, DIRECTION_PLANS } from "@/config/plans";
+import { GiCakeSlice } from "react-icons/gi";
 import {
   FiDownload,
   FiMonitor,
@@ -36,6 +37,7 @@ import {
   FiX,
   FiStar,
   FiMenu,
+  FiInfo,
 } from "react-icons/fi";
 import {
   FaApple,
@@ -147,15 +149,23 @@ export default function LandingPage() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Pricing Typewriter State
+  // Pricing Direction & Typewriter State
+  const [pricingDir, setPricingDir] = useState<"retail" | "cafe" | "sweets">("retail");
   const [pricingTriggered, setPricingTriggered] = useState(false);
   const [typedBasicLine, setTypedBasicLine] = useState(0);
   const [typedBasicChar, setTypedBasicChar] = useState(0);
   const [typedStandardLine, setTypedStandardLine] = useState(0);
   const [typedStandardChar, setTypedStandardChar] = useState(0);
 
-  const basicPlanList = PRICING_PLANS.basic.features;
-  const standardPlanList = PRICING_PLANS.standard.features;
+  const currentPricing = DIRECTION_PLANS[pricingDir];
+  const basicPlanList = currentPricing.basic.features;
+  const standardPlanList = currentPricing.standard.features;
+
+  const handlePricingDirChange = (newDir: "retail" | "cafe" | "sweets") => {
+    setPricingDir(newDir);
+    setTypedBasicLine(DIRECTION_PLANS[newDir].basic.features.length + 1);
+    setTypedStandardLine(DIRECTION_PLANS[newDir].standard.features.length + 1);
+  };
 
   // Sequential typing loop when pricing is viewed
   useEffect(() => {
@@ -1145,27 +1155,71 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* PRICING SECTION (2 TARIF: BASIC = 100k, STANDART = 150k) */}
+      {/* PRICING SECTION (3 YO'NALISH BO'YICHA ALOHIDA 100k / 150k TARIFLAR) */}
       <section id="pricing" className={`scene-section scroll-mt-24 py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t ${theme === "dark" ? "border-white/5" : "border-slate-200"}`}>
-        <div className="text-center max-w-3xl mx-auto mb-16">
+        <div className="text-center max-w-3xl mx-auto mb-10">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-500/10 text-emerald-500 border border-emerald-500/30 text-xs font-black uppercase tracking-wider mb-4">
-            Shaffof va Qat&apos;iy Narxlar
+            Shaffof va Yo‘nalish Bo‘yicha Alohida Narxlar
           </div>
           <h2 className="text-3xl sm:text-5xl font-black tracking-tight">
-            Ikkala Tarif Ham Barcha Bizneslar Uchun Qulay
+            Biznesingiz Yo‘nalishiga Mos Moslashuvchan Tariflar
           </h2>
           <p className={`mt-4 text-base ${theme === "dark" ? "text-slate-400" : "text-slate-600"}`}>
-            Hech qanday yashirin komissiya yo&apos;q. 14 kunlik bepul sinov muddati mavjud.
+            Har bir yo‘nalish o‘ziga xos kassa va ombor imkoniyatlariga ega. Kerakli yo‘nalishni tanlang:
           </p>
         </div>
 
-        {/* Status Indicator */}
-        <div className="flex items-center justify-center gap-2 mb-8">
-          <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
-          <span className="text-xs font-bold text-slate-400">
-            {typedBasicLine < basicPlanList.length || typedStandardLine < standardPlanList.length
-              ? "Tarif imkoniyatlari va qulayliklari ro‘yxati (Tezkor ko‘rish)"
-              : "Barcha imkoniyatlar muvaffaqiyatli yuklandi ✓"}
+        {/* 3 DIRECTION TOGGLE BUTTONS */}
+        <div className="flex flex-wrap items-center justify-center gap-3 mb-8">
+          <button
+            onClick={() => handlePricingDirChange("retail")}
+            className={`flex items-center gap-2.5 px-6 py-3 rounded-2xl font-black text-xs uppercase tracking-wider transition-all cursor-pointer ${
+              pricingDir === "retail"
+                ? "bg-emerald-500 text-slate-950 shadow-lg shadow-emerald-500/30 scale-105 border border-emerald-400"
+                : theme === "dark"
+                ? "bg-slate-900 text-slate-300 hover:bg-slate-800 border border-slate-800"
+                : "bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-300"
+            }`}
+          >
+            <FiShoppingBag className="text-base" />
+            <span>Do‘kon & Supermarket</span>
+          </button>
+
+          <button
+            onClick={() => handlePricingDirChange("cafe")}
+            className={`flex items-center gap-2.5 px-6 py-3 rounded-2xl font-black text-xs uppercase tracking-wider transition-all cursor-pointer ${
+              pricingDir === "cafe"
+                ? "bg-amber-500 text-slate-950 shadow-lg shadow-amber-500/30 scale-105 border border-amber-400"
+                : theme === "dark"
+                ? "bg-slate-900 text-slate-300 hover:bg-slate-800 border border-slate-800"
+                : "bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-300"
+            }`}
+          >
+            <FiCoffee className="text-base" />
+            <span>Kafe & Restoran</span>
+          </button>
+
+          <button
+            onClick={() => handlePricingDirChange("sweets")}
+            className={`flex items-center gap-2.5 px-6 py-3 rounded-2xl font-black text-xs uppercase tracking-wider transition-all cursor-pointer ${
+              pricingDir === "sweets"
+                ? "bg-pink-500 text-slate-950 shadow-lg shadow-pink-500/30 scale-105 border border-pink-400"
+                : theme === "dark"
+                ? "bg-slate-900 text-slate-300 hover:bg-slate-800 border border-slate-800"
+                : "bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-300"
+            }`}
+          >
+            <GiCakeSlice className="text-base" />
+            <span>Shirinliklar & Qandolat</span>
+          </button>
+        </div>
+
+        {/* DIRECTION NOTICE BOX */}
+        <div className="max-w-2xl mx-auto mb-10 p-4 rounded-2xl bg-amber-500/10 border border-amber-500/25 flex items-start gap-3 text-xs text-amber-300/90 leading-relaxed">
+          <FiInfo className="w-5 h-5 text-amber-400 shrink-0 mt-0.5" />
+          <span>
+            <strong>Muhim qoida:</strong> 150 000 so‘mlik Standart tarif faqat tanlangan{" "}
+            <strong>{currentPricing.title}</strong> yo‘nalishi uchun to‘liq imkoniyatlarni taqdim etadi. 3 xil yo‘nalish bitta tarifda aralashtirib berilmaydi, har bir yo‘nalish uchun alohida to‘lanadi.
           </span>
         </div>
 
@@ -1178,19 +1232,23 @@ export default function LandingPage() {
             <div>
               <div className="flex items-center justify-between">
                 <span className="text-xs font-black uppercase tracking-wider px-3 py-1 rounded-full bg-slate-500/15 text-slate-400 border border-slate-500/20">
-                  Boshlang&apos;ich
+                  {currentPricing.basic.badge}
                 </span>
-                <span className="text-xs text-slate-400 font-bold">1 ta kassa</span>
+                <span className="text-xs text-slate-400 font-bold">{currentPricing.basic.posLimit}</span>
               </div>
 
-              <h3 className="text-2xl font-black mt-4">Basic</h3>
+              <h3 className="text-2xl font-black mt-4">{currentPricing.basic.name}</h3>
               <p className={`text-xs mt-1 leading-relaxed ${theme === "dark" ? "text-slate-400" : "text-slate-600"}`}>
-                Kichik do&apos;kon, qahvaxona yoki shirinlik do&apos;konchalari uchun qulay boshlang&apos;ich paket.
+                {currentPricing.basic.description}
               </p>
 
               <div className="mt-6 flex items-baseline gap-2">
-                <span className="text-5xl font-black tracking-tight">100 000</span>
-                <span className="text-xs text-slate-400 font-extrabold uppercase">so&apos;m / oyiga</span>
+                <span className="text-5xl font-black tracking-tight">{currentPricing.basic.priceFormatted}</span>
+                <span className="text-xs text-slate-400 font-extrabold uppercase">{currentPricing.basic.period}</span>
+              </div>
+
+              <div className="mt-2 text-[11px] text-slate-400 font-medium">
+                {currentPricing.basic.directionNotice}
               </div>
 
               {/* Sequential Typewriter Features List for Basic Plan */}
@@ -1240,7 +1298,11 @@ export default function LandingPage() {
             <div className="mt-10">
               <button
                 onClick={() => {
-                  setLeadForm((prev) => ({ ...prev, plan: "basic" }));
+                  setLeadForm((prev) => ({
+                    ...prev,
+                    plan: "basic",
+                    businessType: pricingDir === "sweets" ? "bakery" : pricingDir,
+                  }));
                   setIsLeadModalOpen(true);
                 }}
                 className={`w-full py-4 rounded-xl font-black text-sm border transition-all cursor-pointer ${
@@ -1249,7 +1311,7 @@ export default function LandingPage() {
                     : "bg-slate-100 hover:bg-slate-200 text-slate-800 border-slate-300"
                 }`}
               >
-                Basic Tarifini Tanlash
+                {currentPricing.basic.name}ni Tanlash (100k)
               </button>
             </div>
           </div>
@@ -1264,19 +1326,23 @@ export default function LandingPage() {
             <div>
               <div className="flex items-center justify-between">
                 <span className="text-xs font-black uppercase tracking-wider px-3 py-1 rounded-full bg-emerald-500/15 text-emerald-500 border border-emerald-500/30">
-                  To&apos;liq Imkoniyat
+                  {currentPricing.standard.badge}
                 </span>
-                <span className="text-xs text-emerald-500 font-extrabold">Cheksiz kassa</span>
+                <span className="text-xs text-emerald-500 font-extrabold">{currentPricing.standard.posLimit}</span>
               </div>
 
-              <h3 className="text-2xl font-black mt-4">Standart (Standard)</h3>
+              <h3 className="text-2xl font-black mt-4">{currentPricing.standard.name}</h3>
               <p className={`text-xs mt-1 leading-relaxed ${theme === "dark" ? "text-slate-400" : "text-slate-600"}`}>
-                Do&apos;kon, kafe yoki qandolatchilik tarmog&apos;ini 100% avtomatlashtirish uchun professional yechim.
+                {currentPricing.standard.description}
               </p>
 
               <div className="mt-6 flex items-baseline gap-2">
-                <span className="text-5xl font-black text-emerald-500 tracking-tight">150 000</span>
-                <span className="text-xs text-slate-400 font-extrabold uppercase">so&apos;m / oyiga</span>
+                <span className="text-5xl font-black text-emerald-500 tracking-tight">{currentPricing.standard.priceFormatted}</span>
+                <span className="text-xs text-slate-400 font-extrabold uppercase">{currentPricing.standard.period}</span>
+              </div>
+
+              <div className="mt-2 text-[11px] text-amber-400/90 font-medium">
+                {currentPricing.standard.directionNotice}
               </div>
 
               {/* Sequential Typewriter Features List for Standard Plan */}
@@ -1326,15 +1392,29 @@ export default function LandingPage() {
             <div className="mt-10">
               <button
                 onClick={() => {
-                  setLeadForm((prev) => ({ ...prev, plan: "standard" }));
+                  setLeadForm((prev) => ({
+                    ...prev,
+                    plan: "standard",
+                    businessType: pricingDir === "sweets" ? "bakery" : pricingDir,
+                  }));
                   setIsLeadModalOpen(true);
                 }}
                 className="w-full py-4 rounded-xl font-black text-sm bg-gradient-to-r from-emerald-400 via-teal-400 to-cyan-400 text-slate-950 hover:opacity-95 shadow-xl shadow-emerald-500/25 transition-all transform hover:-translate-y-0.5 cursor-pointer"
               >
-                14 Kun Bepul Boshlash (Standart)
+                14 Kun Bepul Boshlash ({currentPricing.standard.name})
               </button>
             </div>
           </div>
+        </div>
+
+        {/* LINK TO DETAILED PRICING PAGE */}
+        <div className="mt-12 text-center">
+          <Link
+            href="/narxlar"
+            className="inline-flex items-center gap-2 text-xs font-bold text-emerald-400 hover:text-emerald-300 transition underline underline-offset-4"
+          >
+            Barcha yo‘nalishlar bo‘yicha to‘liq taqqoslash jadvali va batafsil ma’lumotlar (/narxlar) →
+          </Link>
         </div>
       </section>
 
